@@ -30,6 +30,9 @@ import { customFontsToLoad } from "./theme"
 import Config from "./config"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { ViewStyle } from "react-native"
+import "@tamagui/core/reset.css"
+import { TamaguiProvider } from "tamagui"
+import tamaguiConfig from "tamagui.config"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -47,8 +50,7 @@ const config = {
           path: "showroom/:queryIndex?/:itemIndex?",
         },
         DemoDebug: "debug",
-        DemoPodcastList: "podcast",
-        DemoCommunity: "community",
+        HealthTracker: "healthTracker",
       },
     },
   },
@@ -100,17 +102,19 @@ function App(props: AppProps) {
 
   // otherwise, we're ready to render the app
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <ErrorBoundary catchErrors={Config.catchErrors}>
-        <GestureHandlerRootView style={$container}>
-          <AppNavigator
-            linking={linking}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
-        </GestureHandlerRootView>
-      </ErrorBoundary>
-    </SafeAreaProvider>
+    <TamaguiProvider config={tamaguiConfig}>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <ErrorBoundary catchErrors={Config.catchErrors}>
+          <GestureHandlerRootView style={$container}>
+            <AppNavigator
+              linking={linking}
+              initialState={initialNavigationState}
+              onStateChange={onNavigationStateChange}
+            />
+          </GestureHandlerRootView>
+        </ErrorBoundary>
+      </SafeAreaProvider>
+    </TamaguiProvider>
   )
 }
 
