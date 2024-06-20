@@ -24,17 +24,22 @@ const MenuButton = styled(Button, {
   backgroundColor: "transparent",
 })
 
+const DEFAULT_HP = 40
+
 export const HealthTrackerScreen: FC<TabScreenProps<"HealthTracker">> = observer(
   function HealthTrackerScreen(_props) {
-    const [initialHealth, setInitialHealth] = useState<number>(40)
     const [playerCount, setPlayerCount] = useState<number>(1)
     const [formValues, setFormValues] = useState({
       playerCountInput: 1,
-      hpCountInput: 40,
+      hpCountInput: DEFAULT_HP,
     })
 
+    const [playerOneHP, setPlayerOneHP] = useState(DEFAULT_HP)
+    const [playerTwoHP, setPlayerTwoHP] = useState(DEFAULT_HP)
+
     const resetGame = () => {
-      setInitialHealth(Number(formValues.hpCountInput))
+      setPlayerOneHP(Number(formValues.hpCountInput))
+      setPlayerTwoHP(Number(formValues.hpCountInput))
       setPlayerCount(Number(formValues.playerCountInput))
     }
     const updateHpCountInput = (newHpCountInput: number) => {
@@ -179,12 +184,25 @@ export const HealthTrackerScreen: FC<TabScreenProps<"HealthTracker">> = observer
         </Dialog>
 
         {playerCount == 1 ? (
-          <HealthTracker startingHp={initialHealth} />
+          <HealthTracker
+            startingHp={playerOneHP}
+            onAdditionPress={() => setPlayerOneHP((prevHP) => prevHP + 1)}
+            onSubtractPress={() => setPlayerOneHP((prevHP) => prevHP - 1)}
+          />
         ) : (
           <>
-            <HealthTracker startingHp={initialHealth} isFlipped />
+            <HealthTracker
+              startingHp={playerTwoHP}
+              isFlipped
+              onAdditionPress={() => setPlayerTwoHP((prevHP) => prevHP + 1)}
+              onSubtractPress={() => setPlayerTwoHP((prevHP) => prevHP - 1)}
+            />
             <Separator marginVertical={15} style={{ borderColor: colors.border }} />
-            <HealthTracker startingHp={initialHealth} />
+            <HealthTracker
+              startingHp={playerOneHP}
+              onAdditionPress={() => setPlayerOneHP((prevHP) => prevHP + 1)}
+              onSubtractPress={() => setPlayerOneHP((prevHP) => prevHP - 1)}
+            />
           </>
         )}
       </Screen>

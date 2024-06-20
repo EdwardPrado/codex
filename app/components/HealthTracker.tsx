@@ -5,15 +5,13 @@ import { View } from "tamagui"
 import { Text } from "./Text"
 import { Button } from "./Button"
 
-export function HealthTracker(props: { startingHp: number; isFlipped?: boolean }) {
+export function HealthTracker(props: {
+  startingHp: number
+  isFlipped?: boolean
+  onSubtractPress: () => void
+  onAdditionPress: () => void
+}) {
   const [health, setHealth] = useState(props.startingHp)
-
-  const handleSubtract = () => {
-    setHealth((prevHealth) => prevHealth - 1)
-  }
-  const handleAdd = () => {
-    setHealth((prevHealth) => prevHealth + 1)
-  }
 
   useEffect(() => {
     setHealth(props.startingHp)
@@ -23,7 +21,7 @@ export function HealthTracker(props: { startingHp: number; isFlipped?: boolean }
     <View style={props.isFlipped ? $healthWrapperFlipped : $healthWrapper}>
       <Button
         preset="filled"
-        onPress={handleSubtract}
+        onPress={props.onSubtractPress}
         style={$healthButton}
         pressedStyle={[{ backgroundColor: "transparent" }]}
       >
@@ -31,7 +29,7 @@ export function HealthTracker(props: { startingHp: number; isFlipped?: boolean }
       </Button>
       <Button
         preset="filled"
-        onPress={handleAdd}
+        onPress={props.onAdditionPress}
         style={$healthButton}
         pressedStyle={[{ backgroundColor: "transparent" }]}
       >
@@ -45,11 +43,11 @@ export function HealthTracker(props: { startingHp: number; isFlipped?: boolean }
           fontSize: 68,
           lineHeight: 76,
           position: "absolute",
-          left: "40%",
-          right: "40%",
           justifyContent: "center",
           alignItems: "center",
           zIndex: -1,
+          width: "100%",
+          textAlign: "center",
         }}
       />
     </View>
