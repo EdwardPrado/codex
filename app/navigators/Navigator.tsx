@@ -1,11 +1,17 @@
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
+import { Search } from "@tamagui/lucide-icons"
 import React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
-import { DemoShowroomScreen, DemoDebugScreen, HealthTrackerScreen } from "../screens"
+import {
+  DemoShowroomScreen,
+  DemoDebugScreen,
+  HealthTrackerScreen,
+  CardSearchScreen,
+} from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
@@ -13,6 +19,7 @@ export type TabParamList = {
   DemoShowroom: { queryIndex?: string; itemIndex?: string }
   DemoDebug: undefined
   HealthTracker: undefined
+  Search: undefined
 }
 
 /**
@@ -67,6 +74,17 @@ export function Navigator() {
           tabBarLabel: translate("navigator.healthTrackerTab"),
           tabBarIcon: ({ focused }) => (
             <Icon icon="heart" color={focused ? colors.tint : undefined} size={30} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Search"
+        component={CardSearchScreen}
+        options={{
+          tabBarLabel: "Search",
+          tabBarIcon: ({ focused }) => (
+            <Search size={30} color={focused ? colors.tint : undefined} />
           ),
         }}
       />

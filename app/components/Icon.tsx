@@ -108,6 +108,10 @@ export const iconRegistry = {
   slack: require("../../assets/icons/demo/slack.png"),
   view: require("../../assets/icons/view.png"),
   x: require("../../assets/icons/x.png"),
+  cost: require("../../assets/icons/cost.webp"),
+  pitch1: require("../../assets/icons/Pitch1.webp"),
+  pitch2: require("../../assets/icons/Pitch2.webp"),
+  pitch3: require("../../assets/icons/Pitch3.webp"),
 }
 
 const $imageStyleBase: ImageStyle = {
