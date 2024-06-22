@@ -1,11 +1,10 @@
 import { observer } from "mobx-react-lite"
-import React, { FC, useMemo, useState } from "react"
-import { ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import { CardListItem, Icon, Screen, Text } from "../components"
+import React, { FC, useEffect, useMemo, useState } from "react"
+import { Pressable, ScrollView, TextStyle, View, ViewStyle } from "react-native"
+import { AutoImage, CardListItem, Icon, Screen, Text } from "../components"
 import { TabScreenProps } from "../navigators/Navigator"
 import { colors, spacing } from "../theme"
 import { Card, cards } from "fab-cards"
-
 import { XStack, Input } from "tamagui"
 
 let typingTimer: ReturnType<typeof setTimeout>
@@ -14,6 +13,7 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
   _props,
 ) {
   const [searchQuery, setSearchQuery] = useState("")
+  const [highlightedCard, setHighlightedCard] = useState("")
 
   const searchQueryRegex: RegExp = useMemo(() => {
     return new RegExp(searchQuery, "i")
@@ -136,6 +136,10 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                       )}
                     </View>
                   }
+                  onPress={() => {
+                    console.log(JSON.stringify(card, null, " "))
+                    setHighlightedCard(card.printings[0].image)
+                  }}
                 >
                   <View>
                     <Text style={$cardMaintext}>{card.name}</Text>
@@ -147,6 +151,21 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
           </>
         )}
       </View>
+
+      {highlightedCard !== "" && (
+        <View style={$cardHighlightWrapper}>
+          <Pressable onPress={() => setHighlightedCard("")}>
+            <View style={$cardHighlight}>
+              <AutoImage
+                maxWidth={280}
+                source={{
+                  uri: `https://storage.googleapis.com/fabmaster/media/images/${highlightedCard}.png`,
+                }}
+              />
+            </View>
+          </Pressable>
+        </View>
+      )}
     </Screen>
   )
 })
@@ -175,4 +194,21 @@ const $cardSubtext: TextStyle = {
 
 const $cardMaintext: TextStyle = {
   fontSize: 14,
+}
+
+const $cardHighlightWrapper: ViewStyle = {
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  right: 0,
+  left: 0,
+  backgroundColor: "rgba(0, 0, 0, 0.9)",
+  zIndex: 9999,
+}
+
+const $cardHighlight: ViewStyle = {
+  height: "100%",
+  width: "100%",
+  justifyContent: "center",
+  alignItems: "center",
 }
