@@ -188,6 +188,7 @@ export const HealthTrackerScreen: FC<TabScreenProps<"HealthTracker">> = observer
             startingHp={playerOneHP}
             onAdditionPress={() => setPlayerOneHP((prevHP) => prevHP + 1)}
             onSubtractPress={() => setPlayerOneHP((prevHP) => prevHP - 1)}
+            viewStyleOverride={{ height: "100%" }}
           />
         ) : (
           <>

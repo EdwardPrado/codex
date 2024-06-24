@@ -1,13 +1,13 @@
 import { Minus, Plus } from "@tamagui/lucide-icons"
 import React, { useEffect, useState } from "react"
-import { ViewStyle } from "react-native/types"
-import { View } from "tamagui"
+import { View, ViewStyle } from "react-native"
 import { Text } from "./Text"
 import { Button } from "./Button"
 
 export function HealthTracker(props: {
   startingHp: number
   isFlipped?: boolean
+  viewStyleOverride?: ViewStyle
   onSubtractPress: () => void
   onAdditionPress: () => void
 }) {
@@ -16,6 +16,19 @@ export function HealthTracker(props: {
   useEffect(() => {
     setHealth(props.startingHp)
   }, [props.startingHp])
+
+  const $healthWrapper: ViewStyle = {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: "50%",
+    ...props.viewStyleOverride,
+  }
+
+  const $healthWrapperFlipped: ViewStyle = {
+    ...$healthWrapper,
+    transform: [{ scale: -1 }],
+  }
 
   return (
     <View style={props.isFlipped ? $healthWrapperFlipped : $healthWrapper}>
@@ -52,18 +65,6 @@ export function HealthTracker(props: {
       />
     </View>
   )
-}
-
-const $healthWrapper: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "space-between",
-  height: "50%",
-}
-
-const $healthWrapperFlipped: ViewStyle = {
-  ...$healthWrapper,
-  transform: [{ scale: -1 }],
 }
 
 const $healthButton: ViewStyle = {
