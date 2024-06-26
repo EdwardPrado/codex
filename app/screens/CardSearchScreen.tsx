@@ -4,8 +4,35 @@ import { Pressable, ScrollView, TextStyle, View, ViewStyle } from "react-native"
 import { AutoImage, CardListItem, Icon, Screen, Text } from "../components"
 import { TabScreenProps } from "../navigators/Navigator"
 import { colors, spacing } from "../theme"
-import { Card, cards } from "fab-cards"
 import { XStack, Input } from "tamagui"
+import { createClient } from "@supabase/supabase-js"
+
+const API_KEY = ""
+const API_URL = "http://10.0.2.2:54321"
+const supabase = createClient(API_URL, API_KEY)
+
+const SUPPORTED_SETS = {
+  MST: "MST",
+  TCC: "TCC",
+  UPR: "UPR",
+  WTR: "WTR",
+  EVO: "EVO",
+  DYN: "DYN",
+  DTD: "DTD",
+  CRU: "CRU",
+  ARC: "ARC",
+  HVY: "HVY",
+  ELE: "ELE",
+  MON: "MON",
+  EVR: "EVR",
+  OUT: "OUT",
+  DVR: "DVR",
+  LEV: "LEV",
+  PSM: "PSM",
+  RVD: "RVD",
+  AUR: "AUR",
+  TER: "TER",
+}
 
 let typingTimer: ReturnType<typeof setTimeout>
 
@@ -13,15 +40,8 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
   _props,
 ) {
   const [searchQuery, setSearchQuery] = useState("")
-  const [highlightedCard, setHighlightedCard] = useState("")
-
-  const searchQueryRegex: RegExp = useMemo(() => {
-    return new RegExp(searchQuery, "i")
-  }, [searchQuery])
-
-  const results = useMemo<Card[]>(() => {
-    return searchQuery ? cards.filter((word) => word.name.match(searchQueryRegex)) : []
-  }, [searchQueryRegex])
+  const [highlightedCard, setHighlightedCard] = useState()
+  const [results, setResults] = useState([])
 
   const handleSearchQuery = (searchQuery: string) => {
     clearTimeout(typingTimer)
@@ -30,20 +50,18 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
     }, 1000)
   }
 
-  const cardColor = (cardIdentifier: string) => {
-    const value = cardIdentifier.match(/[^-]+$/)
-
+  const cardColor = (pitch: number) => {
     let hex = ""
 
-    switch (value?.toString()) {
-      case "yellow":
+    switch (pitch) {
+      case 1:
+        hex = "#c70e09"
+        break
+      case 2:
         hex = "#ffef00"
         break
-      case "blue":
+      case 3:
         hex = "#0091d8"
-        break
-      case "red":
-        hex = "#c70e09"
         break
     }
 
@@ -62,6 +80,42 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
         return null
     }
   }
+
+  const handleHighlightedCard = (card) => {
+    //TODO:  Filter card_printings by supported set IDs then select from the filtered array
+    const supportedPrintings = card.card_printings.filter(
+      (printing) => SUPPORTED_SETS[printing.set_id] !== undefined,
+    )
+
+    console.log("All Printings: ", card.card_printings)
+    console.log("Supported Printings: ", supportedPrintings)
+
+    setHighlightedCard({
+      card_id: supportedPrintings[0].card_id,
+      set_id: supportedPrintings[0].set_id,
+    })
+  }
+
+  useEffect(() => {
+    const fetchArtists = async () => {
+      const { data, error } = await supabase
+        .from("cards")
+        .select("unique_id, name, pitch, cost, type_text, card_printings(card_id, set_id)")
+        .ilike("name", `%${searchQuery}%`)
+
+      if (error) {
+        console.error(`Error: ${JSON.stringify(error, null, 2)}`)
+      } else {
+        console.log(JSON.stringify(data, null, 2))
+        console.log("Results: ", JSON.stringify(data, null, 2))
+        setResults(data)
+      }
+    }
+
+    if (searchQuery) {
+      fetchArtists()
+    }
+  }, [searchQuery])
 
   return (
     <Screen
@@ -90,7 +144,7 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
               {results.map((card) => (
                 <CardListItem
                   topSeparator
-                  key={card.cardIdentifier}
+                  key={card.unique_id}
                   RightComponent={
                     <View
                       style={{
@@ -99,7 +153,8 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                         flexDirection: "row",
                         flexWrap: "nowrap",
                         overflow: "hidden",
-                        justifyContent: "space-between",
+                        justifyContent: "flex-end",
+                        gap: 12,
                         alignItems: "center",
                       }}
                     >
@@ -107,11 +162,11 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                         <>
                           {card.pitch && pitchIcon(card.pitch)}
 
-                          {cardColor(card.cardIdentifier) && (
+                          {cardColor(Number(card.pitch)) && (
                             <Icon
                               size={24}
                               icon={"cost"}
-                              color={cardColor(card.cardIdentifier)?.toString()}
+                              color={cardColor(Number(card.pitch))?.toString()}
                               style={{
                                 borderWidth: 1,
                                 borderColor: colors.palette.secondary100,
@@ -124,9 +179,10 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                               display: "flex",
                               alignItems: "center",
                               flexDirection: "row",
+                              alignContent: "flex-end",
                             }}
                           >
-                            <Text>{card.cost} </Text>
+                            {card.cost && <Text>{card.cost} </Text>}
 
                             <Icon size={24} icon={"cost"} />
                           </View>
@@ -137,13 +193,12 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                     </View>
                   }
                   onPress={() => {
-                    console.log(JSON.stringify(card, null, " "))
-                    setHighlightedCard(card.printings[0].image)
+                    handleHighlightedCard(card)
                   }}
                 >
                   <View>
                     <Text style={$cardMaintext}>{card.name}</Text>
-                    <Text style={$cardSubtext}>{card.typeText}</Text>
+                    <Text style={$cardSubtext}>{card.type_text}</Text>
                   </View>
                 </CardListItem>
               ))}
@@ -152,14 +207,14 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
         )}
       </View>
 
-      {highlightedCard !== "" && (
+      {highlightedCard !== undefined && (
         <View style={$cardHighlightWrapper}>
-          <Pressable onPress={() => setHighlightedCard("")}>
+          <Pressable onPress={() => setHighlightedCard()}>
             <View style={$cardHighlight}>
               <AutoImage
                 maxWidth={280}
                 source={{
-                  uri: `https://storage.googleapis.com/fabmaster/media/images/${highlightedCard}.png`,
+                  uri: `${API_URL}/storage/v1/object/public/assets/${highlightedCard.set_id}/${highlightedCard.card_id}.png`,
                 }}
               />
             </View>
