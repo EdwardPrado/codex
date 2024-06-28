@@ -34,18 +34,17 @@ const en = {
     tapToSignIn: "Tap to sign in!",
     hint: "Hint: you can use any email address and your favorite password :)",
   },
+  welcomeScreen: {
+    postscript:
+      "psst  — This probably isn't what your app looks like. (Unless your designer handed you these screens, and in that case, ship it!)",
+    readyForLaunch: "Your app, almost ready for launch!",
+    exciting: "(ohh, this is exciting!)",
+    getStarted: "Get Started",
+  },
   navigator: {
     componentsTab: "Components",
     debugTab: "Debug",
     healthTrackerTab: "Health Tracker",
-  },
-  demoShowroomScreen: {
-    jumpStart: "Components to jump start your project!",
-    lorem2Sentences:
-      "Nulla cupidatat deserunt amet quis aliquip nostrud do adipisicing. Adipisicing excepteur elit laborum Lorem adipisicing do duis.",
-    demoHeaderTxExample: "Yay",
-    demoViaTxProp: "Via `tx` Prop",
-    demoViaSpecifiedTxProp: "Via `{{prop}}Tx` Prop",
   },
   demoDebugScreen: {
     howTo: "HOW TO",

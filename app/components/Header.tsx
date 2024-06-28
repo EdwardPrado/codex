@@ -214,7 +214,6 @@ export function Header(props: HeaderProps) {
           iconColor={rightIconColor}
           onPress={onRightPress}
           txOptions={rightTxOptions}
-          backgroundColor={backgroundColor}
           ActionComponent={RightActionComponent}
         />
       </View>
@@ -259,7 +258,7 @@ function HeaderAction(props: HeaderActionProps) {
     )
   }
 
-  return <View style={[$actionFillerContainer, { backgroundColor }]} />
+  return <View style={[$actionFillerContainer]} />
 }
 
 const $wrapper: ViewStyle = {

@@ -6,17 +6,11 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
-import {
-  DemoShowroomScreen,
-  DemoDebugScreen,
-  HealthTrackerScreen,
-  CardSearchScreen,
-} from "../screens"
+import { DemoDebugScreen, HealthTrackerScreen, CardSearchScreen } from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
 export type TabParamList = {
-  DemoShowroom: { queryIndex?: string; itemIndex?: string }
   DemoDebug: undefined
   HealthTracker: undefined
   Search: undefined
@@ -57,17 +51,6 @@ export function Navigator() {
       }}
     >
       <Tab.Screen
-        name="DemoShowroom"
-        component={DemoShowroomScreen}
-        options={{
-          tabBarLabel: translate("navigator.componentsTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="components" color={focused ? colors.tint : undefined} size={30} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
         name="HealthTracker"
         component={HealthTrackerScreen}
         options={{
@@ -89,16 +72,18 @@ export function Navigator() {
         }}
       />
 
-      <Tab.Screen
-        name="DemoDebug"
-        component={DemoDebugScreen}
-        options={{
-          tabBarLabel: translate("navigator.debugTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="debug" color={focused ? colors.tint : undefined} size={30} />
-          ),
-        }}
-      />
+      {process.env.IS_DEV_ENVIRONMENT && (
+        <Tab.Screen
+          name="DemoDebug"
+          component={DemoDebugScreen}
+          options={{
+            tabBarLabel: translate("navigator.debugTab"),
+            tabBarIcon: ({ focused }) => (
+              <Icon icon="debug" color={focused ? colors.tint : undefined} size={30} />
+            ),
+          }}
+        />
+      )}
     </Tab.Navigator>
   )
 }

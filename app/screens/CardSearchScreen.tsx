@@ -1,15 +1,21 @@
 import { observer } from "mobx-react-lite"
-import React, { FC, useEffect, useMemo, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { Pressable, ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import { AutoImage, CardListItem, Icon, Screen, Text } from "../components"
+import {
+  AutoImage,
+  CardListItem,
+  Icon,
+  Announcement,
+  LoadingOverlay,
+  Screen,
+  Text,
+} from "../components"
 import { TabScreenProps } from "../navigators/Navigator"
 import { colors, spacing } from "../theme"
 import { XStack, Input } from "tamagui"
 import { createClient } from "@supabase/supabase-js"
 
-const API_KEY = ""
-const API_URL = "http://10.0.2.2:54321"
-const supabase = createClient(API_URL, API_KEY)
+const supabase = createClient(process.env.API_URL, process.env.API_KEY)
 
 const SUPPORTED_SETS = {
   MST: "MST",
@@ -40,8 +46,9 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
   _props,
 ) {
   const [searchQuery, setSearchQuery] = useState("")
-  const [highlightedCard, setHighlightedCard] = useState()
+  const [highlightedCard, setHighlightedCard] = useState("")
   const [results, setResults] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSearchQuery = (searchQuery: string) => {
     clearTimeout(typingTimer)
@@ -90,17 +97,18 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
     console.log("All Printings: ", card.card_printings)
     console.log("Supported Printings: ", supportedPrintings)
 
-    setHighlightedCard({
-      card_id: supportedPrintings[0].card_id,
-      set_id: supportedPrintings[0].set_id,
-    })
+    setHighlightedCard(supportedPrintings[0].image_url)
   }
 
   useEffect(() => {
     const fetchArtists = async () => {
+      setIsLoading(true)
+
       const { data, error } = await supabase
         .from("cards")
-        .select("unique_id, name, pitch, cost, type_text, card_printings(card_id, set_id)")
+        .select(
+          "unique_id, name, pitch, cost, type_text, card_printings(card_id, set_id, image_url)",
+        )
         .ilike("name", `%${searchQuery}%`)
 
       if (error) {
@@ -110,6 +118,8 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
         console.log("Results: ", JSON.stringify(data, null, 2))
         setResults(data)
       }
+
+      setIsLoading(false)
     }
 
     if (searchQuery) {
@@ -123,6 +133,8 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
       contentContainerStyle={$screenContentContainer}
       safeAreaEdges={["top", "bottom"]}
     >
+      {isLoading && <LoadingOverlay />}
+
       <XStack alignItems="center" space="$2">
         <Input
           flex={1}
@@ -131,6 +143,9 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
           onChangeText={(value) => handleSearchQuery(value)}
         />
       </XStack>
+      {!searchQuery && (
+        <Announcement message="You haven't searched any cards yet.  Once you have, you'll see cards below." />
+      )}
       <View>
         {searchQuery && (
           <>
@@ -207,14 +222,14 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
         )}
       </View>
 
-      {highlightedCard !== undefined && (
+      {highlightedCard && (
         <View style={$cardHighlightWrapper}>
-          <Pressable onPress={() => setHighlightedCard()}>
+          <Pressable onPress={() => setHighlightedCard("")}>
             <View style={$cardHighlight}>
               <AutoImage
                 maxWidth={280}
                 source={{
-                  uri: `${API_URL}/storage/v1/object/public/assets/${highlightedCard.set_id}/${highlightedCard.card_id}.png`,
+                  uri: highlightedCard,
                 }}
               />
             </View>

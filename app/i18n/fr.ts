@@ -37,18 +37,17 @@ const fr: Translations = {
     tapToSignIn: "Appuyez pour vous connecter !",
     hint: "Astuce : vous pouvez utiliser n'importe quelle adresse e-mail et votre mot de passe préféré :)",
   },
+  welcomeScreen: {
+    postscript:
+      "psst  — Ce n'est probablement pas à quoi ressemble votre application. (À moins que votre designer ne vous ait donné ces écrans, dans ce cas, mettez la en prod !)",
+    readyForLaunch: "Votre application, presque prête pour le lancement !",
+    exciting: "(ohh, c'est excitant !)",
+    getStarted: "Allons-y !",
+  },
   navigator: {
     componentsTab: "Composants",
     debugTab: "Débogage",
     healthTrackerTab: "Health Tracker",
-  },
-  demoShowroomScreen: {
-    jumpStart: "Composants pour démarrer votre projet !",
-    lorem2Sentences:
-      "Nulla cupidatat deserunt amet quis aliquip nostrud do adipisicing. Adipisicing excepteur elit laborum Lorem adipisicing do duis.",
-    demoHeaderTxExample: "Yay",
-    demoViaTxProp: "Via la propriété `tx`",
-    demoViaSpecifiedTxProp: "Via la propriété `{{prop}}Tx` spécifiée",
   },
   demoDebugScreen: {
     howTo: "COMMENT FAIRE",
