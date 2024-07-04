@@ -1,15 +1,7 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
 import { Pressable, ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import {
-  AutoImage,
-  CardListItem,
-  Icon,
-  Announcement,
-  LoadingOverlay,
-  Screen,
-  Text,
-} from "../components"
+import { AutoImage, CardListItem, Icon, Alert, LoadingOverlay, Screen, Text } from "../components"
 import { TabScreenProps } from "../navigators/Navigator"
 import { colors, spacing } from "../theme"
 import { XStack, Input } from "tamagui"
@@ -94,9 +86,6 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
       (printing) => SUPPORTED_SETS[printing.set_id] !== undefined,
     )
 
-    console.log("All Printings: ", card.card_printings)
-    console.log("Supported Printings: ", supportedPrintings)
-
     setHighlightedCard(supportedPrintings[0].image_url)
   }
 
@@ -114,8 +103,6 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
       if (error) {
         console.error(`Error: ${JSON.stringify(error, null, 2)}`)
       } else {
-        console.log(JSON.stringify(data, null, 2))
-        console.log("Results: ", JSON.stringify(data, null, 2))
         setResults(data)
       }
 
@@ -135,19 +122,24 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
     >
       {isLoading && <LoadingOverlay />}
 
+      <View style={$tabBar}>
+        <Text preset="subheading" style={$tabBarText}>
+          Search
+        </Text>
+      </View>
+
       <XStack alignItems="center" space="$2">
         <Input
           flex={1}
-          size={"$4"}
           placeholder="Search card name"
           onChangeText={(value) => handleSearchQuery(value)}
         />
       </XStack>
       {!searchQuery && (
-        <Announcement message="You haven't searched any cards yet.  Once you have, you'll see cards below." />
+        <Alert message="You haven't searched any cards yet.  Once you have, you'll see cards below." />
       )}
       <View>
-        {searchQuery && (
+        {searchQuery && !isLoading && (
           <>
             <Text style={$searchSummary}>
               <Text style={$searchSummaryBold}>{results.length} cards</Text> matching
@@ -199,7 +191,7 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                           >
                             {card.cost && <Text>{card.cost} </Text>}
 
-                            <Icon size={24} icon={"cost"} />
+                            {card.cost && <Icon size={24} icon={"cost"} />}
                           </View>
                         </>
                       ) : (
@@ -281,4 +273,12 @@ const $cardHighlight: ViewStyle = {
   width: "100%",
   justifyContent: "center",
   alignItems: "center",
+}
+
+const $tabBar: ViewStyle = {
+  marginVertical: spacing.sm,
+}
+
+const $tabBarText: TextStyle = {
+  fontSize: spacing.xl,
 }

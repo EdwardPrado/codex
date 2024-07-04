@@ -1,12 +1,12 @@
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
-import { Search } from "@tamagui/lucide-icons"
+import { Book, Search } from "@tamagui/lucide-icons"
 import React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
-import { DemoDebugScreen, HealthTrackerScreen, CardSearchScreen } from "../screens"
+import { DemoDebugScreen, HealthTrackerScreen, CardSearchScreen, DecklistScreen } from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
@@ -14,6 +14,7 @@ export type TabParamList = {
   DemoDebug: undefined
   HealthTracker: undefined
   Search: undefined
+  Decklist: undefined
 }
 
 /**
@@ -71,6 +72,19 @@ export function Navigator() {
           ),
         }}
       />
+
+      <Tab.Group>
+        <Tab.Screen
+          name="Decklist"
+          component={DecklistScreen}
+          options={{
+            tabBarLabel: "Decks",
+            tabBarIcon: ({ focused }) => (
+              <Book size={30} color={focused ? colors.tint : undefined} />
+            ),
+          }}
+        />
+      </Tab.Group>
 
       {process.env.IS_DEV_ENVIRONMENT && (
         <Tab.Screen

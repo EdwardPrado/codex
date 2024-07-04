@@ -4,18 +4,18 @@ import { spacing } from "app/theme/spacing"
 import React from "react"
 import { View, ViewStyle, Text, TextStyle } from "react-native"
 
-export const Announcement = (props: { message: String }) => {
+export const Alert = (props: { message: String }) => {
   const { message } = props
 
   return (
-    <View style={$announcementWrapper}>
+    <View style={$alertWrapper}>
       <Info color={colors.palette.neutral600} />
-      <Text style={$announcementText}>{message}</Text>
+      <Text style={$alertText}>{message}</Text>
     </View>
   )
 }
 
-const $announcementWrapper: ViewStyle = {
+const $alertWrapper: ViewStyle = {
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
@@ -29,7 +29,7 @@ const $announcementWrapper: ViewStyle = {
   borderColor: colors.palette.neutral400,
 }
 
-const $announcementText: TextStyle = {
-  width: "95%",
+const $alertText: TextStyle = {
+  width: "90%",
   color: colors.palette.neutral600,
 }

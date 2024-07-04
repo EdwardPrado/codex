@@ -3,6 +3,7 @@ const plugins = [
   /** react-native-reanimated web support @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/#web */
   "@babel/plugin-proposal-export-namespace-from",
   "inline-dotenv",
+  "@babel/plugin-transform-async-generator-functions",
 ]
 
 /** @type {import('@babel/core').TransformOptions} */

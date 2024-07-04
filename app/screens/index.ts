@@ -6,6 +6,8 @@ export * from "./WelcomeSearchScreen"
 export * from "./WelcomeLoginScreen"
 export * from "./HealthTrackerScreen"
 export * from "./CardSearchScreen"
+export * from "./DecklistScreen"
+export * from "./AddDeckScreen"
 
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here

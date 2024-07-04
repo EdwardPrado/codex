@@ -18,10 +18,6 @@ export const WelcomeLoginScreen: FC<WelcomeScreenProps> = observer(function Welc
     authenticationStore: { logout },
   } = useStores()
 
-  function goNext() {
-    navigation.navigate("Demo")
-  }
-
   const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
 
   return (
@@ -35,7 +31,7 @@ export const WelcomeLoginScreen: FC<WelcomeScreenProps> = observer(function Welc
         <View>
           <Text style={$stepIndicator}>3/3</Text>
           <Text preset="heading" style={$welcomeHeading}>
-            Create your account
+            Start playing
           </Text>
         </View>
 
@@ -53,9 +49,6 @@ export const WelcomeLoginScreen: FC<WelcomeScreenProps> = observer(function Welc
             style={$primaryButton}
           >
             Register
-          </Button>
-          <Button preset="default" onPress={goNext} style={{ flexGrow: 3 }}>
-            Continue as guest
           </Button>
         </View>
       </View>
