@@ -5,9 +5,7 @@ import { AutoImage, CardListItem, Icon, Alert, LoadingOverlay, Screen, Text } fr
 import { TabScreenProps } from "../navigators/Navigator"
 import { colors, spacing } from "../theme"
 import { XStack, Input } from "tamagui"
-import { createClient } from "@supabase/supabase-js"
-
-const supabase = createClient(process.env.API_URL, process.env.API_KEY)
+import { supabase } from "app/services/auth/supabase"
 
 const SUPPORTED_SETS = {
   MST: "MST",
@@ -90,7 +88,7 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
   }
 
   useEffect(() => {
-    const fetchArtists = async () => {
+    const fetchCards = async () => {
       setIsLoading(true)
 
       const { data, error } = await supabase
@@ -110,7 +108,7 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
     }
 
     if (searchQuery) {
-      fetchArtists()
+      fetchCards()
     }
   }, [searchQuery])
 

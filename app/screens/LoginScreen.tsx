@@ -19,6 +19,7 @@ import { colors, spacing } from "../theme"
 import { useForm, Controller } from "react-hook-form"
 import { useAuth } from "app/services/auth/useAuth"
 import { supabase } from "app/services/auth/supabase"
+import { useStores } from "app/models"
 
 async function signInWithDiscord() {
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -48,6 +49,9 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [attemptsCount, setAttemptsCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const {
+    authenticationStore: { setAuthEmail, setAuthToken },
+  } = useStores()
 
   const {
     control,
@@ -69,8 +73,13 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     try {
       if (isRegister) {
         const { data, error } = await signUp(input)
-        if (error) console.log(error)
-        else console.log(data)
+        if (error) {
+          setAuthToken("")
+          setAuthEmail("")
+        } else {
+          setAuthToken(data.session?.access_token)
+          setAuthEmail(data.session?.user.email || "")
+        }
       } else {
         const { data, error } = await signIn(input)
         if (error) console.log(error)

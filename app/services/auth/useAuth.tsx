@@ -27,6 +27,7 @@ type SignUpProps = {
 type AuthContextType = {
   signIn: (props: SignInProps) => Promise<AuthTokenResponsePassword>
   signUp: (props: SignUpProps) => Promise<AuthResponse>
+  logout: () => void
 } & AuthState
 
 const AuthContext = createContext<AuthContextType>({
@@ -34,6 +35,7 @@ const AuthContext = createContext<AuthContextType>({
   token: undefined,
   signIn: () => new Promise(() => ({})),
   signUp: () => new Promise(() => ({})),
+  logout: () => {},
 })
 
 export function useAuth() {
@@ -106,6 +108,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     [supabase],
   )
 
+  const logout = useCallback(async () => {
+    const result = await supabase.auth.signOut()
+
+    if (!result.error) {
+      setToken(undefined)
+    }
+  }, [supabase])
+
   return (
     <AuthContext.Provider
       value={{
@@ -113,6 +123,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         token,
         signIn,
         signUp,
+        logout,
       }}
     >
       {children}

@@ -1,12 +1,18 @@
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
-import { Book, Search } from "@tamagui/lucide-icons"
+import { Book, Home, Search } from "@tamagui/lucide-icons"
 import React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
-import { DemoDebugScreen, HealthTrackerScreen, CardSearchScreen, DecklistScreen } from "../screens"
+import {
+  DemoDebugScreen,
+  HealthTrackerScreen,
+  CardSearchScreen,
+  DecklistScreen,
+  HomeScreen,
+} from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
@@ -15,6 +21,7 @@ export type TabParamList = {
   HealthTracker: undefined
   Search: undefined
   Decklist: undefined
+  Home: undefined
 }
 
 /**
@@ -51,6 +58,15 @@ export function Navigator() {
         tabBarItemStyle: $tabBarItem,
       }}
     >
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Home",
+          tabBarIcon: ({ focused }) => <Home color={focused ? colors.tint : undefined} size={30} />,
+        }}
+      />
+
       <Tab.Screen
         name="HealthTracker"
         component={HealthTrackerScreen}

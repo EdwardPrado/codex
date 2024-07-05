@@ -4,7 +4,7 @@
   "expo": {
     "name": "Codex",
     "slug": "Codex",
-    "scheme": "codex",
+    "scheme": "com.codex",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon-all.png",

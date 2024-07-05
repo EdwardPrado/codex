@@ -1,21 +1,14 @@
 import { observer } from "mobx-react-lite"
-import React, { FC, useCallback, useState } from "react"
-import { View, ViewStyle, TextInput, Alert, TextStyle, StyleSheet } from "react-native"
-import { HealthTracker, Screen, StackNavbar, Text } from "../components"
+import React, { FC } from "react"
+import { View, ViewStyle, TextStyle, StyleSheet } from "react-native"
+import { Screen, StackNavbar, Text } from "../components"
 import { TabScreenProps } from "../navigators/Navigator"
 import { colors, spacing } from "../theme"
-import { Input, XStack, Button } from "tamagui"
+import { Input, Button } from "tamagui"
 import { useForm, Controller } from "react-hook-form"
 import { Dropdown } from "react-native-element-dropdown"
 import { deckYupSchema, formatDropdownData } from "../../schemas"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { CardEntry, GameplayFormat } from "models"
-
-type NewDeck = {
-  deckName: string
-  gameplayFormat: GameplayFormat
-  cards: CardEntry[]
-}
 
 export const AddDeckScreen: FC<TabScreenProps<"DeckList">> = observer(function AddDeckScreen(
   _props,
