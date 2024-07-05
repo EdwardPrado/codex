@@ -16,11 +16,10 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import * as Screens from "app/screens"
 import Config from "../config"
-import { useStores } from "../models"
 import { Navigator, TabParamList } from "./Navigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { colors } from "app/theme"
-import { HealthTrackerScreen, LoginScreenProps } from "app/screens"
+import { LoginScreenProps } from "app/screens"
 import { useAuth } from "app/services/auth/useAuth"
 
 /**
@@ -46,6 +45,7 @@ export type AppStackParamList = {
   Demo: NavigatorScreenParams<TabParamList>
   HealthTracker: undefined
   AddDeck: undefined
+  ViewDeck: undefined
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -76,6 +76,7 @@ const AppStack = observer(function AppStack() {
         <>
           <Stack.Screen name="Demo" component={Navigator} />
           <Stack.Screen name="AddDeck" component={Screens.AddDeckScreen} />
+          <Stack.Screen name="ViewDeck" component={Screens.ViewDeckScreen} />
         </>
       ) : (
         <>

@@ -1,6 +1,6 @@
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
-import { Book, Home, Search } from "@tamagui/lucide-icons"
+import { Book, Home, Search, Swords } from "@tamagui/lucide-icons"
 import React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -71,9 +71,9 @@ export function Navigator() {
         name="HealthTracker"
         component={HealthTrackerScreen}
         options={{
-          tabBarLabel: translate("navigator.healthTrackerTab"),
+          tabBarLabel: "Combat",
           tabBarIcon: ({ focused }) => (
-            <Icon icon="heart" color={focused ? colors.tint : undefined} size={30} />
+            <Swords color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />

@@ -5,13 +5,20 @@ import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { spacing } from "../theme"
 import { Text } from "./Text"
 
-export function StackNavbar(props: { isReversed?: boolean; text: string }) {
-  const { text, isReversed } = props
+export function StackNavbar(props: {
+  isReversed?: boolean
+  text: string
+  overrideBack?: () => void
+}) {
+  const { text, isReversed, overrideBack } = props
 
   return (
     <View style={$wrapper}>
       <View style={$innerWrapper}>
-        <TouchableOpacity style={$actionIconContainer} onPress={() => goBack()}>
+        <TouchableOpacity
+          style={$actionIconContainer}
+          onPress={() => (overrideBack ? overrideBack() : goBack())}
+        >
           <ArrowLeft color={isReversed ? "#fff" : "#000"} />
         </TouchableOpacity>
         <Text preset="subheading">{text}</Text>

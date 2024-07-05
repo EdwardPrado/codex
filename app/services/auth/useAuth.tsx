@@ -7,11 +7,12 @@ import React, {
   useState,
 } from "react"
 import { Session, supabase } from "./supabase"
-import { AuthResponse, AuthTokenResponsePassword } from "@supabase/supabase-js"
+import { AuthResponse, AuthTokenResponsePassword, UserIdentity } from "@supabase/supabase-js"
 
 type AuthState = {
   isAuthenticated: boolean
   token?: Session["access_token"]
+  userId?: UserIdentity["user_id"]
 }
 
 type SignInProps = {
@@ -33,6 +34,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   token: undefined,
+  userId: undefined,
   signIn: () => new Promise(() => ({})),
   signUp: () => new Promise(() => ({})),
   logout: () => {},
@@ -52,6 +54,7 @@ export function useAuth() {
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = useState<AuthState["token"]>(undefined)
+  const [userId, setUserId] = useState<string>("")
 
   useEffect(() => {
     const {
@@ -87,6 +90,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         setToken(result.data.session.access_token)
       }
 
+      if (result.data?.user?.id) {
+        setUserId(result.data.user.id)
+      }
+
       return result
     },
     [supabase],
@@ -103,6 +110,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         setToken(result.data.session.access_token)
       }
 
+      if (result.data?.user?.id) {
+        setUserId(result.data.user.id)
+      }
+
       return result
     },
     [supabase],
@@ -113,6 +124,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     if (!result.error) {
       setToken(undefined)
+      setUserId("")
     }
   }, [supabase])
 
@@ -121,6 +133,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       value={{
         isAuthenticated: !!token,
         token,
+        userId,
         signIn,
         signUp,
         logout,

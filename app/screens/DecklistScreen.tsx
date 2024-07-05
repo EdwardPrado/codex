@@ -228,12 +228,8 @@ export const DecklistScreen: FC = (navigation) => {
 
       {decks.length > 0 && <ScrollView></ScrollView>}
 
-      <Button
-        style={$cornerButton}
-        LeftAccessory={() => <BookPlus />}
-        onPress={() => navigate("AddDeck")}
-      >
-        Add deck
+      <Button style={$cornerButton} onPress={() => navigate("AddDeck")}>
+        <BookPlus />
       </Button>
     </Screen>
   )

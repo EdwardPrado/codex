@@ -14,6 +14,7 @@ export const formatDropdownData: dropdownValue[] = [
   { label: GameplayFormat.shapeshifter, value: GameplayFormat.shapeshifter },
   { label: GameplayFormat.blitz_living_legend, value: GameplayFormat.blitz_living_legend },
   { label: GameplayFormat.cc_living_legend, value: GameplayFormat.cc_living_legend },
+  { label: GameplayFormat.cube, value: GameplayFormat.cube },
 ]
 
 export const deckYupSchema = yup.object({

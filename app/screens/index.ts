@@ -9,6 +9,7 @@ export * from "./CardSearchScreen"
 export * from "./DecklistScreen"
 export * from "./AddDeckScreen"
 export * from "./HomeScreen"
+export * from "./ViewDeckScreen"
 
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here

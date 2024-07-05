@@ -9,6 +9,9 @@ import { useForm, Controller } from "react-hook-form"
 import { Dropdown } from "react-native-element-dropdown"
 import { deckYupSchema, formatDropdownData } from "../../schemas"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { supabase } from "app/services/auth/supabase"
+import { useAuth } from "app/services/auth/useAuth"
+import { navigate } from "app/navigators"
 
 export const AddDeckScreen: FC<TabScreenProps<"DeckList">> = observer(function AddDeckScreen(
   _props,
@@ -21,9 +24,25 @@ export const AddDeckScreen: FC<TabScreenProps<"DeckList">> = observer(function A
     resolver: yupResolver(deckYupSchema),
   })
 
+  const { userId } = useAuth()
+
   const onSubmit = (data) => handleSave(data)
 
-  const handleSave = () => {}
+  const handleSave = async (formData) => {
+    console.log("Form Data: ", formData)
+    const { data, error } = await supabase
+      .from("decks")
+      .insert([{ name: formData.deckName, user_fk: userId, format_fk: 1 }])
+      .select()
+
+    if (error) {
+      console.log(error)
+      console.log("User Id: ", userId)
+    }
+    if (data) {
+      navigate("ViewDeck")
+    }
+  }
 
   return (
     <Screen
