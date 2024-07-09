@@ -6,9 +6,11 @@ import { TabScreenProps } from "../navigators/Navigator"
 import { spacing } from "../theme"
 import { navigate } from "app/navigators"
 
-export const ViewDeckScreen: FC<TabScreenProps<"Home">> = observer(function CardSearchScreen(
+export const ViewDeckScreen: FC<TabScreenProps<"ViewDeck">> = observer(function CardSearchScreen(
   _props,
 ) {
+  const { id, created_at, name, art_crops, formats } = _props?.route.params.deck
+
   return (
     <Screen
       preset="auto"
@@ -17,6 +19,7 @@ export const ViewDeckScreen: FC<TabScreenProps<"Home">> = observer(function Card
     >
       <StackNavbar text="Add Deck" overrideBack={() => navigate("Decklist")} />
       <Text>View Deck Screen</Text>
+      <Text>{name}</Text>
     </Screen>
   )
 })

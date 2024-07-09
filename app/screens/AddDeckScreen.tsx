@@ -24,7 +24,7 @@ export const AddDeckScreen: FC<TabScreenProps<"DeckList">> = observer(function A
     resolver: yupResolver(deckYupSchema),
   })
 
-  const { userId } = useAuth()
+  const { user } = useAuth()
 
   const onSubmit = (data) => handleSave(data)
 
@@ -32,12 +32,12 @@ export const AddDeckScreen: FC<TabScreenProps<"DeckList">> = observer(function A
     console.log("Form Data: ", formData)
     const { data, error } = await supabase
       .from("decks")
-      .insert([{ name: formData.deckName, user_fk: userId, format_fk: 1 }])
+      .insert([{ name: formData.deckName, user_id: user?.id, format_id: 4, art_crop_id: 10 }])
       .select()
 
     if (error) {
       console.log(error)
-      console.log("User Id: ", userId)
+      console.log("User Id: ", user?.id)
     }
     if (data) {
       navigate("ViewDeck")

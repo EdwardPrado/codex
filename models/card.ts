@@ -18,7 +18,6 @@ export interface Card {
   subtypes: string[]
   types: string[]
   typeText: string
-
   bannedFormats?: GameplayFormat[]
   cost?: number
   defense?: number

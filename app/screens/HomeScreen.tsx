@@ -7,17 +7,13 @@ import { spacing } from "../theme"
 import { Button } from "tamagui"
 import { useStores } from "app/models"
 import { useAuth } from "app/services/auth/useAuth"
+import { SignOutButton } from "app/components/SignOutButton"
 
 export const HomeScreen: FC<TabScreenProps<"Home">> = observer(function CardSearchScreen(_props) {
-  const {
-    authenticationStore: { logout: storeLogout },
-  } = useStores()
-
   const { logout } = useAuth()
 
   const handleLogout = () => {
     logout()
-    storeLogout()
   }
 
   return (
@@ -29,6 +25,7 @@ export const HomeScreen: FC<TabScreenProps<"Home">> = observer(function CardSear
       <Text>Hello World</Text>
 
       <Button onPress={handleLogout}>Logout</Button>
+      <SignOutButton />
     </Screen>
   )
 })

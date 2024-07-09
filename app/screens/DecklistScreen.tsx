@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useState } from "react"
-import { ImageStyle, ScrollView, TextStyle, View, ViewStyle } from "react-native"
+import React, { FC, useCallback, useEffect, useState } from "react"
+import { FlatList, ImageStyle, ScrollView, TextStyle, View, ViewStyle, Image } from "react-native"
 import { colors, spacing } from "../theme"
-import { Alert, Button, Screen, Text } from "app/components"
+import { Alert, Button, ListItem, LoadingOverlay, Screen, Text } from "app/components"
 import { BookPlus, Upload } from "@tamagui/lucide-icons"
 import * as Clipboard from "expo-clipboard"
-import { createClient } from "@supabase/supabase-js"
 import { navigate } from "app/navigators"
-
-const supabase = createClient(process.env.API_URL, process.env.API_KEY)
+import { supabase } from "app/services/auth/supabase"
+import { useAuth } from "app/services/auth/useAuth"
+import { DeckListItem } from "app/components/DeckListItem"
 
 type CardEntry = {
   amount: number
@@ -184,13 +184,36 @@ const fetchCards = async (parsedCards: Array<CardEntry>): Promise<[]> => {
   if (error) console.error(error)
   else console.log(JSON.stringify(data, null, 2))
 
-  //  console.log(JSON.stringify(parsedCards, null, 2))
-
   return []
 }
 
 export const DecklistScreen: FC = (navigation) => {
-  const [decks, setDecks] = useState([])
+  const [decks, setDecks] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { user } = useAuth()
+
+  async function fetchDecks() {
+    setIsLoading(true)
+    try {
+      let { data, error } = await supabase
+        .from("decks")
+        .select(
+          `id, created_at, name, user_id, formats (id, abbreviation), art_crops (id, image_url)`,
+        )
+        .eq("user_id", `${user?.id}`)
+
+      if (error) console.log(error)
+      else {
+        setDecks(data)
+      }
+    } catch (e) {}
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    fetchDecks()
+  }, [])
 
   const handleImport = async (): Promise<ImportedDeckList> => {
     let convertedDecklist: ImportedDeckList = []
@@ -206,9 +229,15 @@ export const DecklistScreen: FC = (navigation) => {
     return convertedDecklist
   }
 
+  //const renderItems = useCallback(({ items }) => {
+  //  return <>
+  //  {items.map((item) => <DeckListItem deck={item} />)}
+  //  </>
+  //}, [])
+
   return (
     <Screen
-      preset="auto"
+      preset="fixed"
       contentContainerStyle={$screenContentContainer}
       safeAreaEdges={["top", "bottom"]}
     >
@@ -218,6 +247,10 @@ export const DecklistScreen: FC = (navigation) => {
         </Text>
       </View>
 
+      <Button onPress={() => fetchDecks()}>Fetch Decks</Button>
+
+      {isLoading && <LoadingOverlay />}
+
       {decks.length === 0 && (
         <Alert message="You haven't created any decks yet.  Once you have, you'll see the decks below." />
       )}
@@ -226,7 +259,15 @@ export const DecklistScreen: FC = (navigation) => {
         <Upload />
       </Button>
 
-      {decks.length > 0 && <ScrollView></ScrollView>}
+      {decks.length > 0 && (
+        <FlatList
+          data={decks}
+          renderItem={({ item }) => (
+            <DeckListItem deck={item} onPress={() => navigate("ViewDeck", { deck: item })} />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      )}
 
       <Button style={$cornerButton} onPress={() => navigate("AddDeck")}>
         <BookPlus />

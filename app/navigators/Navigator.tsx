@@ -22,6 +22,21 @@ export type TabParamList = {
   Search: undefined
   Decklist: undefined
   Home: undefined
+  ViewDeck: {
+    deck: {
+      id: string
+      created_at: string
+      name: string
+      formats: {
+        id: string
+        abbreviation: string
+      }
+      art_crops: {
+        id: string
+        image_url: string
+      }
+    }
+  }
 }
 
 /**

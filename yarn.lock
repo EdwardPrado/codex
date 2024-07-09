@@ -1941,7 +1941,7 @@
     "@types/yargs" "^17.0.8"
     chalk "^4.0.0"
 
-"@journeyapps/react-native-quick-sqlite@^1.1.6", "@journeyapps/react-native-quick-sqlite@^1.1.7":
+"@journeyapps/react-native-quick-sqlite@^1.1.7":
   version "1.1.7"
   resolved "https://registry.npmjs.org/@journeyapps/react-native-quick-sqlite/-/react-native-quick-sqlite-1.1.7.tgz"
   integrity sha512-OzK/57wbRSmYZ8D9JUx0CZTpG4Kg0Iir0fiqY9KxwJlhck0SnfJ7lh3V16J3mWGhVcZsC1tytV15SPvFyB80qA==
@@ -2079,37 +2079,6 @@
   version "0.11.0"
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
-
-"@powersync/common@^1.9.0", "@powersync/common@1.13.0":
-  version "1.13.0"
-  resolved "https://registry.npmjs.org/@powersync/common/-/common-1.13.0.tgz"
-  integrity sha512-DcN4zsXComToo8oAcm+d5tTWJHusP6yvYA95+kCvRPe+o/OuxsF4O1T+cFEgAxElVEvz9bmmQgjtUifFQDPcDQ==
-  dependencies:
-    async-mutex "^0.4.0"
-    buffer "^6.0.3"
-    can-ndjson-stream "^1.0.2"
-    cross-fetch "^4.0.0"
-    event-iterator "^2.0.0"
-    js-logger "^1.6.1"
-    lodash "^4.17.21"
-    rsocket-core "1.0.0-alpha.3"
-    rsocket-websocket-client "1.0.0-alpha.3"
-
-"@powersync/react-native@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.npmjs.org/@powersync/react-native/-/react-native-1.8.0.tgz"
-  integrity sha512-2nSWQW+pw7P4u+uGgzNyX9t7YOvLGKkrd+WuxztxYUyKag5HJYUZqNhBmQAAZTGDPhw+UpXebAOFGLBVuSr+aw==
-  dependencies:
-    "@powersync/common" "1.13.0"
-    "@powersync/react" "1.3.5"
-    async-lock "^1.4.0"
-    bson "^6.6.0"
-    react-native-fetch-api "^3.0.0"
-
-"@powersync/react@1.3.5":
-  version "1.3.5"
-  resolved "https://registry.npmjs.org/@powersync/react/-/react-1.3.5.tgz"
-  integrity sha512-txJMpjClTw4Lcwyxrdnjg1zjwKVK/SiCHFuDJ3XFbRex9R9qI+KpJ8g285o6b7IN9oxpIVTG1aRBfd4w1yWZYw==
 
 "@react-native-async-storage/async-storage@1.21.0":
   version "1.21.0"
@@ -4162,18 +4131,6 @@ async-limiter@~1.0.0:
   resolved "https://registry.npmjs.org/async-limiter/-/async-limiter-1.0.1.tgz"
   integrity sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
 
-async-lock@^1.4.0:
-  version "1.4.1"
-  resolved "https://registry.npmjs.org/async-lock/-/async-lock-1.4.1.tgz"
-  integrity sha512-Az2ZTpuytrtqENulXwO3GGv1Bztugx6TT37NIo7imr/Qo0gsYiGtSdBa2B6fsXhTpVZDNfu1Qn3pk531e3q+nQ==
-
-async-mutex@^0.4.0:
-  version "0.4.1"
-  resolved "https://registry.npmjs.org/async-mutex/-/async-mutex-0.4.1.tgz"
-  integrity sha512-WfoBo4E/TbCX1G95XTjbWTE3X2XLG0m1Xbv2cwOtuPdyH9CZvnaA5nCt1ucjaKEgW2A5IF71hxrRhr83Je5xjA==
-  dependencies:
-    tslib "^2.4.0"
-
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz"
@@ -4321,7 +4278,7 @@ balanced-match@^1.0.0:
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-base-64@*, base-64@1.0.0:
+base-64@*, base-64@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/base-64/-/base-64-1.0.0.tgz"
   integrity sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==
@@ -4431,11 +4388,6 @@ bser@2.1.1:
   dependencies:
     node-int64 "^0.4.0"
 
-bson@^6.6.0:
-  version "6.8.0"
-  resolved "https://registry.npmjs.org/bson/-/bson-6.8.0.tgz"
-  integrity sha512-iOJg8pr7wq2tg/zSlCCHMi3hMm5JTOxLTagf3zxhcenHsFp+c6uOs6K7W5UE7A4QIJGtqh/ZovFNMP4mOPJynQ==
-
 buffer-alloc-unsafe@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/buffer-alloc-unsafe/-/buffer-alloc-unsafe-1.1.0.tgz"
@@ -4466,14 +4418,6 @@ buffer@^5.4.3, buffer@^5.5.0:
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
-
-buffer@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz"
-  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
-  dependencies:
-    base64-js "^1.3.1"
-    ieee754 "^1.2.1"
 
 builtins@^1.0.3:
   version "1.0.3"
@@ -4554,18 +4498,6 @@ camelcase@^6.2.0:
   version "6.3.0"
   resolved "https://registry.npmjs.org/camelcase/-/camelcase-6.3.0.tgz"
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
-
-can-namespace@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/can-namespace/-/can-namespace-1.0.0.tgz"
-  integrity sha512-1sBY/SLwwcmxz3NhyVhLjt2uD/dZ7V1mII82/MIXSDn5QXnslnosJnjlP8+yTx2uTCRvw1jlFDElRs4pX7AG5w==
-
-can-ndjson-stream@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/can-ndjson-stream/-/can-ndjson-stream-1.0.2.tgz"
-  integrity sha512-//tM8wcTV42SyD1JGua7WMVftZEeTwapcHJTTe3vJwuVywXD01CJbdEkgwRYjy2evIByVJV21ZKBdSv5ygIw1w==
-  dependencies:
-    can-namespace "^1.0.0"
 
 caniuse-lite@^1.0.30001629:
   version "1.0.30001636"
@@ -4897,13 +4829,6 @@ cross-fetch@^3.1.5:
   version "3.1.8"
   resolved "https://registry.npmjs.org/cross-fetch/-/cross-fetch-3.1.8.tgz"
   integrity sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==
-  dependencies:
-    node-fetch "^2.6.12"
-
-cross-fetch@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/cross-fetch/-/cross-fetch-4.0.0.tgz"
-  integrity sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==
   dependencies:
     node-fetch "^2.6.12"
 
@@ -5762,11 +5687,6 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.npmjs.org/etag/-/etag-1.8.1.tgz"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
-
-event-iterator@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/event-iterator/-/event-iterator-2.0.0.tgz"
-  integrity sha512-KGft0ldl31BZVV//jj+IAIGCxkvvUkkON+ScH6zfoX+l+omX6001ggyRSpI0Io2Hlro0ThXotswCtfzS8UkIiQ==
 
 event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   version "5.0.1"
@@ -6677,7 +6597,7 @@ iconv-lite@0.6.3:
   dependencies:
     safer-buffer ">= 2.1.2 < 3.0.0"
 
-ieee754@^1.1.13, ieee754@^1.2.1:
+ieee754@^1.1.13:
   version "1.2.1"
   resolved "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
@@ -7555,11 +7475,6 @@ join-component@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/join-component/-/join-component-1.1.0.tgz"
   integrity sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==
-
-js-logger@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.npmjs.org/js-logger/-/js-logger-1.6.1.tgz"
-  integrity sha512-yTgMCPXVjhmg28CuUH8CKjU+cIKL/G+zTu4Fn4lQxs8mRFH/03QTNvEFngcxfg/gRDiQAOoyCKmMTOm9ayOzXA==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
@@ -9244,7 +9159,7 @@ react-native-fast-image@^8.6.3:
   resolved "https://registry.npmjs.org/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz"
   integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
 
-react-native-fetch-api@*, react-native-fetch-api@^3.0.0, react-native-fetch-api@3.0.0:
+react-native-fetch-api@*, react-native-fetch-api@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/react-native-fetch-api/-/react-native-fetch-api-3.0.0.tgz"
   integrity sha512-g2rtqPjdroaboDKTsJCTlcmtw54E25OjyaunUP0anOZn4Fuo2IKs8BVfe02zVggA/UysbmfSnRJIqtNkAgggNA==
@@ -9314,7 +9229,7 @@ react-native-svg@>=12, react-native-svg@15.2.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-url-polyfill@*, react-native-url-polyfill@2.0.0:
+react-native-url-polyfill@*, react-native-url-polyfill@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/react-native-url-polyfill/-/react-native-url-polyfill-2.0.0.tgz"
   integrity sha512-My330Do7/DvKnEvwQc0WdcBnFPploYKp9CYlefDXzIdEaA+PAhDYllkvGeEroEzvc4Kzzj2O4yVdz8v6fjRvhA==
@@ -9728,18 +9643,6 @@ rimraf@~2.6.2:
   integrity sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==
   dependencies:
     glob "^7.1.3"
-
-rsocket-core@^1.0.0-alpha.3, rsocket-core@1.0.0-alpha.3:
-  version "1.0.0-alpha.3"
-  resolved "https://registry.npmjs.org/rsocket-core/-/rsocket-core-1.0.0-alpha.3.tgz"
-  integrity sha512-BzIe2w8dFJlUS5N9fGUNRkxL19kd64bxbXsT11wj7isLfKkPZeNXisB2p/LWvSjFzWStnpOiScZ0g3/8ROE0pw==
-
-rsocket-websocket-client@1.0.0-alpha.3:
-  version "1.0.0-alpha.3"
-  resolved "https://registry.npmjs.org/rsocket-websocket-client/-/rsocket-websocket-client-1.0.0-alpha.3.tgz"
-  integrity sha512-CwTwTNMGa8BKvrWde/kM3q8IHuzO8RCIfzuj25BsVe9y8eehDQHt4fXk0g1i/wpsxTm+RY6DxE6Vr5snozKVOg==
-  dependencies:
-    rsocket-core "^1.0.0-alpha.3"
 
 rtl-detect@^1.0.2:
   version "1.1.2"
@@ -10582,7 +10485,7 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-text-encoding@*, text-encoding@0.7.0:
+text-encoding@*, text-encoding@^0.7.0:
   version "0.7.0"
   resolved "https://registry.npmjs.org/text-encoding/-/text-encoding-0.7.0.tgz"
   integrity sha512-oJQ3f1hrOnbRLOcwKz0Liq2IcrvDeZRHXhd9RgLrsT+DjWY/nty1Hi7v3dtkaEYbPYe0mUoOfzRrMwfXXwgPUA==

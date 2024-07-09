@@ -27,6 +27,7 @@ const BaseConfig: ConfigBaseProps = {
   supabaseUrl: process.env.API_URL!,
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   supabaseAnonKey: process.env.API_KEY!,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 }
 
 export default BaseConfig

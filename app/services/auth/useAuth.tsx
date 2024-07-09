@@ -7,12 +7,12 @@ import React, {
   useState,
 } from "react"
 import { Session, supabase } from "./supabase"
-import { AuthResponse, AuthTokenResponsePassword, UserIdentity } from "@supabase/supabase-js"
+import { AuthResponse, AuthTokenResponsePassword, User, UserIdentity } from "@supabase/supabase-js"
 
 type AuthState = {
   isAuthenticated: boolean
   token?: Session["access_token"]
-  userId?: UserIdentity["user_id"]
+  user: User
 }
 
 type SignInProps = {
@@ -28,16 +28,16 @@ type SignUpProps = {
 type AuthContextType = {
   signIn: (props: SignInProps) => Promise<AuthTokenResponsePassword>
   signUp: (props: SignUpProps) => Promise<AuthResponse>
-  logout: () => void
+  logout: () => Promise<void>
 } & AuthState
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   token: undefined,
-  userId: undefined,
+  user: null!,
   signIn: () => new Promise(() => ({})),
   signUp: () => new Promise(() => ({})),
-  logout: () => {},
+  logout: () => new Promise(() => ({})),
 })
 
 export function useAuth() {
@@ -54,7 +54,7 @@ export function useAuth() {
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = useState<AuthState["token"]>(undefined)
-  const [userId, setUserId] = useState<string>("")
+  const [user, setUser] = useState<User>(null!)
 
   useEffect(() => {
     const {
@@ -90,8 +90,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         setToken(result.data.session.access_token)
       }
 
-      if (result.data?.user?.id) {
-        setUserId(result.data.user.id)
+      if (result.data?.user) {
+        setUser(result.data.user)
       }
 
       return result
@@ -110,8 +110,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         setToken(result.data.session.access_token)
       }
 
-      if (result.data?.user?.id) {
-        setUserId(result.data.user.id)
+      if (result.data?.user) {
+        setUser(result.data.user)
       }
 
       return result
@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     if (!result.error) {
       setToken(undefined)
-      setUserId("")
+      setUser(null!)
     }
   }, [supabase])
 
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       value={{
         isAuthenticated: !!token,
         token,
-        userId,
+        user,
         signIn,
         signUp,
         logout,
