@@ -1,5 +1,4 @@
 import { yupResolver } from "@hookform/resolvers/yup"
-import DiscordIcon from "app/components/DiscordIcon"
 import { observer } from "mobx-react-lite"
 import React, { ComponentType, FC, useMemo, useState } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
@@ -18,17 +17,10 @@ import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
 import { useForm, Controller } from "react-hook-form"
 import { useAuth } from "app/services/auth/useAuth"
-import { supabase } from "app/services/auth/supabase"
 import { useStores } from "app/models"
 
-async function signInWithDiscord() {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "discord",
-  })
-
-  if (error) console.log(error)
-  else console.log(data)
-}
+const LOGIN_ERROR_MESSAGE = "Unable to login with provided credentials"
+const REGISTER_ERROR_MESSAGE = "Unable to register with provided credentials"
 
 export enum LoginMode {
   login = "Login",
@@ -49,6 +41,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [attemptsCount, setAttemptsCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState(false)
   const {
     authenticationStore: { setAuthEmail, setAuthToken },
   } = useStores()
@@ -73,6 +66,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     try {
       if (isRegister) {
         const { data, error } = await signUp(input)
+
         if (error) {
           setAuthToken("")
           setAuthEmail("")
@@ -80,10 +74,17 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
           setAuthToken(data.session?.access_token)
           setAuthEmail(data.session?.user.email || "")
         }
+
+        if (error) {
+          console.log(error)
+          setLoginError(true)
+        } else console.log(data)
       } else {
         const { data, error } = await signIn(input)
-        if (error) console.log(error)
-        else console.log(data)
+        if (error) {
+          console.log(error)
+          setLoginError(true)
+        } else console.log(data)
       }
     } finally {
       setIsLoading(false)
@@ -115,19 +116,6 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       {isLoading && <LoadingOverlay />}
       <StackNavbar text={isRegister ? LoginMode.register : LoginMode.login} />
       {attemptsCount > 2 && <Text tx="loginScreen.hint" size="sm" weight="light" style={$hint} />}
-
-      <Button testID="login-button" style={$tapButton} onPress={() => signInWithDiscord()}>
-        <View style={$tapButtonContent}>
-          <DiscordIcon />
-          <Text>{isRegister ? LoginMode.register : LoginMode.login} with Discord</Text>
-        </View>
-      </Button>
-
-      <View style={$dividerWrapper}>
-        <View style={$dividerContainer}>
-          <Text style={$dividerText}>or continue with</Text>
-        </View>
-      </View>
 
       <View style={$inputField}>
         <Controller
@@ -180,6 +168,13 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         />
         {errors.password && <Text style={$errorText}>{errors.password.message}</Text>}
       </View>
+      {loginError && (
+        <Text style={$errorText}>
+          {_props?.route?.params?.mode === LoginMode.login
+            ? LOGIN_ERROR_MESSAGE
+            : REGISTER_ERROR_MESSAGE}
+        </Text>
+      )}
 
       <Button
         testID="login-button"
@@ -212,36 +207,6 @@ const $tapButton: ViewStyle = {
   justifyContent: "center",
   alignItems: "center",
   marginTop: spacing.md,
-}
-
-const $tapButtonContent: ViewStyle = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "nowrap",
-  justifyContent: "center",
-  alignContent: "center",
-  gap: 8,
-}
-
-const $dividerWrapper: ViewStyle = {
-  height: 2,
-  width: "auto",
-  backgroundColor: colors.separator,
-  marginVertical: spacing.lg,
-}
-
-const $dividerContainer: ViewStyle = {
-  position: "absolute",
-  top: -12,
-  width: "100%",
-  display: "flex",
-  alignItems: "center",
-}
-
-const $dividerText: TextStyle = {
-  width: "40%",
-  backgroundColor: colors.background,
-  textAlign: "center",
 }
 
 const $errorText: TextStyle = {
