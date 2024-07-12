@@ -4,7 +4,7 @@
   "expo": {
     "name": "Codex",
     "slug": "Codex",
-    "scheme": "codex",
+    "scheme": "com.codex",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app-icon-all.png",
@@ -17,9 +17,7 @@
       "fallbackToCacheTimeout": 0
     },
     "jsEngine": "hermes",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "icon": "./assets/images/app-icon-android-legacy.png",
       "package": "com.codex",
@@ -62,7 +60,8 @@
             "newArchEnabled": false
           },
           "android": {
-            "newArchEnabled": false
+            "newArchEnabled": false,
+            "networkInspector": false
           }
         }
       ],

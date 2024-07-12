@@ -16,10 +16,11 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import * as Screens from "app/screens"
 import Config from "../config"
-import { useStores } from "../models"
 import { Navigator, TabParamList } from "./Navigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { colors } from "app/theme"
+import { LoginScreenProps } from "app/screens"
+import { useAuth } from "app/services/auth/useAuth"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -36,10 +37,16 @@ import { colors } from "app/theme"
  */
 export type AppStackParamList = {
   Welcome: undefined
-  Login: undefined
+  WelcomeHealth: undefined
+  WelcomeSearch: undefined
+  WelcomeSignup: undefined
+  WelcomeLogin: undefined
+  Login: LoginScreenProps
   Demo: NavigatorScreenParams<TabParamList>
-  // 🔥 Your screens go here
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  HealthTracker: undefined
+  AddDeck: undefined
+  ViewDeck: undefined
+  DeckList: undefined
 }
 
 /**
@@ -57,12 +64,29 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false, navigationBarColor: colors.background }}>
-      <Stack.Screen name="Demo" component={Navigator} />
+  const { isAuthenticated } = useAuth()
 
-      {/** 🔥 Your screens go here */}
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
+      initialRouteName={isAuthenticated ? "Demo" : "Welcome"}
+    >
+      {isAuthenticated ? (
+        <>
+          <Stack.Screen name="Demo" component={Navigator} />
+          <Stack.Screen name="AddDeck" component={Screens.AddDeckScreen} />
+          <Stack.Screen name="ViewDeck" component={Screens.ViewDeckScreen} />
+          <Stack.Screen name="DeckList" component={Screens.DeckListScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} />
+          <Stack.Screen name="WelcomeHealth" component={Screens.WelcomeHealthScreen} />
+          <Stack.Screen name="WelcomeSearch" component={Screens.WelcomeSearchScreen} />
+          <Stack.Screen name="WelcomeLogin" component={Screens.WelcomeLoginScreen} />
+          <Stack.Screen name="Login" component={Screens.LoginScreen} />
+        </>
+      )}
     </Stack.Navigator>
   )
 })

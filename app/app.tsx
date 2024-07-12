@@ -33,6 +33,8 @@ import { ViewStyle } from "react-native"
 import "@tamagui/core/reset.css"
 import { TamaguiProvider } from "tamagui"
 import tamaguiConfig from "tamagui.config"
+import "react-native-polyfill-globals/auto"
+import "@azure/core-asynciterator-polyfill"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -46,9 +48,6 @@ const config = {
     Welcome: "welcome",
     Demo: {
       screens: {
-        DemoShowroom: {
-          path: "showroom/:queryIndex?/:itemIndex?",
-        },
         DemoDebug: "debug",
         HealthTracker: "healthTracker",
       },

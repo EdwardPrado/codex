@@ -1,11 +1,34 @@
 import { observer } from "mobx-react-lite"
-import React, { FC, useEffect, useMemo, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { Pressable, ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import { AutoImage, CardListItem, Icon, Screen, Text } from "../components"
+import { AutoImage, CardListItem, Icon, Alert, LoadingOverlay, Screen, Text } from "../components"
 import { TabScreenProps } from "../navigators/Navigator"
 import { colors, spacing } from "../theme"
-import { Card, cards } from "fab-cards"
 import { XStack, Input } from "tamagui"
+import { supabase } from "app/services/auth/supabase"
+
+const SUPPORTED_SETS = {
+  MST: "MST",
+  TCC: "TCC",
+  UPR: "UPR",
+  WTR: "WTR",
+  EVO: "EVO",
+  DYN: "DYN",
+  DTD: "DTD",
+  CRU: "CRU",
+  ARC: "ARC",
+  HVY: "HVY",
+  ELE: "ELE",
+  MON: "MON",
+  EVR: "EVR",
+  OUT: "OUT",
+  DVR: "DVR",
+  LEV: "LEV",
+  PSM: "PSM",
+  RVD: "RVD",
+  AUR: "AUR",
+  TER: "TER",
+}
 
 let typingTimer: ReturnType<typeof setTimeout>
 
@@ -14,14 +37,8 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
 ) {
   const [searchQuery, setSearchQuery] = useState("")
   const [highlightedCard, setHighlightedCard] = useState("")
-
-  const searchQueryRegex: RegExp = useMemo(() => {
-    return new RegExp(searchQuery, "i")
-  }, [searchQuery])
-
-  const results = useMemo<Card[]>(() => {
-    return searchQuery ? cards.filter((word) => word.name.match(searchQueryRegex)) : []
-  }, [searchQueryRegex])
+  const [results, setResults] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSearchQuery = (searchQuery: string) => {
     clearTimeout(typingTimer)
@@ -30,20 +47,18 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
     }, 1000)
   }
 
-  const cardColor = (cardIdentifier: string) => {
-    const value = cardIdentifier.match(/[^-]+$/)
-
+  const cardColor = (pitch: number) => {
     let hex = ""
 
-    switch (value?.toString()) {
-      case "yellow":
+    switch (pitch) {
+      case 1:
+        hex = "#c70e09"
+        break
+      case 2:
         hex = "#ffef00"
         break
-      case "blue":
+      case 3:
         hex = "#0091d8"
-        break
-      case "red":
-        hex = "#c70e09"
         break
     }
 
@@ -63,22 +78,66 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
     }
   }
 
+  const handleHighlightedCard = (card) => {
+    //TODO:  Filter card_printings by supported set IDs then select from the filtered array
+    const supportedPrintings = card.card_printings.filter(
+      (printing) => SUPPORTED_SETS[printing.set_id] !== undefined,
+    )
+
+    setHighlightedCard(supportedPrintings[0].image_url)
+  }
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      setIsLoading(true)
+
+      const { data, error } = await supabase
+        .from("cards")
+        .select(
+          "unique_id, name, pitch, cost, type_text, card_printings(card_id, set_id, image_url)",
+        )
+        .ilike("name", `%${searchQuery}%`)
+
+      if (error) {
+        console.error(`Error: ${JSON.stringify(error, null, 2)}`)
+      } else {
+        setResults(data)
+      }
+
+      setIsLoading(false)
+    }
+
+    if (searchQuery) {
+      fetchCards()
+    }
+  }, [searchQuery])
+
   return (
     <Screen
       preset="auto"
       contentContainerStyle={$screenContentContainer}
       safeAreaEdges={["top", "bottom"]}
     >
+      {isLoading && <LoadingOverlay />}
+
+      <View style={$tabBar}>
+        <Text preset="subheading" style={$tabBarText}>
+          Search
+        </Text>
+      </View>
+
       <XStack alignItems="center" space="$2">
         <Input
           flex={1}
-          size={"$4"}
           placeholder="Search card name"
           onChangeText={(value) => handleSearchQuery(value)}
         />
       </XStack>
+      {!searchQuery && (
+        <Alert message="You haven't searched any cards yet.  Once you have, you'll see cards below." />
+      )}
       <View>
-        {searchQuery && (
+        {searchQuery && !isLoading && (
           <>
             <Text style={$searchSummary}>
               <Text style={$searchSummaryBold}>{results.length} cards</Text> matching
@@ -90,7 +149,7 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
               {results.map((card) => (
                 <CardListItem
                   topSeparator
-                  key={card.cardIdentifier}
+                  key={card.unique_id}
                   RightComponent={
                     <View
                       style={{
@@ -99,7 +158,8 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                         flexDirection: "row",
                         flexWrap: "nowrap",
                         overflow: "hidden",
-                        justifyContent: "space-between",
+                        justifyContent: "flex-end",
+                        gap: 12,
                         alignItems: "center",
                       }}
                     >
@@ -107,11 +167,11 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                         <>
                           {card.pitch && pitchIcon(card.pitch)}
 
-                          {cardColor(card.cardIdentifier) && (
+                          {cardColor(Number(card.pitch)) && (
                             <Icon
                               size={24}
                               icon={"cost"}
-                              color={cardColor(card.cardIdentifier)?.toString()}
+                              color={cardColor(Number(card.pitch))?.toString()}
                               style={{
                                 borderWidth: 1,
                                 borderColor: colors.palette.secondary100,
@@ -124,11 +184,12 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                               display: "flex",
                               alignItems: "center",
                               flexDirection: "row",
+                              alignContent: "flex-end",
                             }}
                           >
-                            <Text>{card.cost} </Text>
+                            {card.cost && <Text>{card.cost} </Text>}
 
-                            <Icon size={24} icon={"cost"} />
+                            {card.cost && <Icon size={24} icon={"cost"} />}
                           </View>
                         </>
                       ) : (
@@ -137,13 +198,12 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
                     </View>
                   }
                   onPress={() => {
-                    console.log(JSON.stringify(card, null, " "))
-                    setHighlightedCard(card.printings[0].image)
+                    handleHighlightedCard(card)
                   }}
                 >
                   <View>
                     <Text style={$cardMaintext}>{card.name}</Text>
-                    <Text style={$cardSubtext}>{card.typeText}</Text>
+                    <Text style={$cardSubtext}>{card.type_text}</Text>
                   </View>
                 </CardListItem>
               ))}
@@ -152,14 +212,14 @@ export const CardSearchScreen: FC<TabScreenProps<"Search">> = observer(function 
         )}
       </View>
 
-      {highlightedCard !== "" && (
+      {highlightedCard && (
         <View style={$cardHighlightWrapper}>
           <Pressable onPress={() => setHighlightedCard("")}>
             <View style={$cardHighlight}>
               <AutoImage
                 maxWidth={280}
                 source={{
-                  uri: `https://storage.googleapis.com/fabmaster/media/images/${highlightedCard}.png`,
+                  uri: highlightedCard,
                 }}
               />
             </View>
@@ -211,4 +271,12 @@ const $cardHighlight: ViewStyle = {
   width: "100%",
   justifyContent: "center",
   alignItems: "center",
+}
+
+const $tabBar: ViewStyle = {
+  marginVertical: spacing.sm,
+}
+
+const $tabBarText: TextStyle = {
+  fontSize: spacing.xl,
 }

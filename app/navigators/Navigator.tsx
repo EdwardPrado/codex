@@ -1,25 +1,47 @@
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
-import { Search } from "@tamagui/lucide-icons"
+import { Book, Home, Search, Swords } from "@tamagui/lucide-icons"
 import React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
 import {
-  DemoShowroomScreen,
   DemoDebugScreen,
   HealthTrackerScreen,
   CardSearchScreen,
+  DeckScreen,
+  HomeScreen,
 } from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
 export type TabParamList = {
-  DemoShowroom: { queryIndex?: string; itemIndex?: string }
   DemoDebug: undefined
   HealthTracker: undefined
   Search: undefined
+  Decklist: undefined
+  Home: undefined
+  ViewDeck: {
+    deck: {
+      id: string
+      created_at: string
+      name: string
+      formats: {
+        id: string
+        name: string
+        abbreviation: string
+      }
+      art_crops: {
+        id: string
+        crop_url: string
+        banner_url: string
+      }
+    }
+  }
+  DeckList: {
+    id: string
+  }
 }
 
 /**
@@ -57,13 +79,11 @@ export function Navigator() {
       }}
     >
       <Tab.Screen
-        name="DemoShowroom"
-        component={DemoShowroomScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
-          tabBarLabel: translate("navigator.componentsTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="components" color={focused ? colors.tint : undefined} size={30} />
-          ),
+          tabBarLabel: "Home",
+          tabBarIcon: ({ focused }) => <Home color={focused ? colors.tint : undefined} size={30} />,
         }}
       />
 
@@ -71,9 +91,9 @@ export function Navigator() {
         name="HealthTracker"
         component={HealthTrackerScreen}
         options={{
-          tabBarLabel: translate("navigator.healthTrackerTab"),
+          tabBarLabel: "Combat",
           tabBarIcon: ({ focused }) => (
-            <Icon icon="heart" color={focused ? colors.tint : undefined} size={30} />
+            <Swords color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />
@@ -89,16 +109,31 @@ export function Navigator() {
         }}
       />
 
-      <Tab.Screen
-        name="DemoDebug"
-        component={DemoDebugScreen}
-        options={{
-          tabBarLabel: translate("navigator.debugTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="debug" color={focused ? colors.tint : undefined} size={30} />
-          ),
-        }}
-      />
+      <Tab.Group>
+        <Tab.Screen
+          name="Decklist"
+          component={DeckScreen}
+          options={{
+            tabBarLabel: "Decks",
+            tabBarIcon: ({ focused }) => (
+              <Book size={30} color={focused ? colors.tint : undefined} />
+            ),
+          }}
+        />
+      </Tab.Group>
+
+      {process.env.IS_DEV_ENVIRONMENT && (
+        <Tab.Screen
+          name="DemoDebug"
+          component={DemoDebugScreen}
+          options={{
+            tabBarLabel: translate("navigator.debugTab"),
+            tabBarIcon: ({ focused }) => (
+              <Icon icon="debug" color={focused ? colors.tint : undefined} size={30} />
+            ),
+          }}
+        />
+      )}
     </Tab.Navigator>
   )
 }
