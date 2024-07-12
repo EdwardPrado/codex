@@ -18,6 +18,10 @@ export const formatDropdownData: dropdownValue[] = [
 ]
 
 export const deckYupSchema = yup.object({
-  deckName: yup.string().defined(),
-  gameplayFormat: yup.mixed().oneOf(formatDropdownData).defined(),
+  deckName: yup
+    .string()
+    .min(5, "Name must be at least 5 characters long")
+    .max(40, "Name must be at most 40 characters long")
+    .required("Name is required"),
+  gameplayFormat: yup.mixed().oneOf(formatDropdownData).required("Format is required"),
 })

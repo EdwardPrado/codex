@@ -46,8 +46,7 @@ export type AppStackParamList = {
   HealthTracker: undefined
   AddDeck: undefined
   ViewDeck: undefined
-  // 🔥 Your screens go here
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  DeckList: undefined
 }
 
 /**
@@ -77,6 +76,7 @@ const AppStack = observer(function AppStack() {
           <Stack.Screen name="Demo" component={Navigator} />
           <Stack.Screen name="AddDeck" component={Screens.AddDeckScreen} />
           <Stack.Screen name="ViewDeck" component={Screens.ViewDeckScreen} />
+          <Stack.Screen name="DeckList" component={Screens.DeckListScreen} />
         </>
       ) : (
         <>

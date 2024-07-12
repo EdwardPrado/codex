@@ -26,10 +26,9 @@ export const AddDeckScreen: FC<TabScreenProps<"DeckList">> = observer(function A
 
   const { user } = useAuth()
 
-  const onSubmit = (data) => handleSave(data)
+  const onSubmit = (data: { deckName: string }) => handleSave(data)
 
-  const handleSave = async (formData) => {
-    console.log("Form Data: ", formData)
+  const handleSave = async (formData: { deckName: string }) => {
     const { data, error } = await supabase
       .from("decks")
       .insert([{ name: formData.deckName, user_id: user?.id, format_id: 4, art_crop_id: 10 }])
@@ -37,7 +36,6 @@ export const AddDeckScreen: FC<TabScreenProps<"DeckList">> = observer(function A
 
     if (error) {
       console.log(error)
-      console.log("User Id: ", user?.id)
     }
     if (data) {
       navigate("ViewDeck")

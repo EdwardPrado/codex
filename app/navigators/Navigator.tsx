@@ -10,7 +10,7 @@ import {
   DemoDebugScreen,
   HealthTrackerScreen,
   CardSearchScreen,
-  DecklistScreen,
+  DeckScreen,
   HomeScreen,
 } from "../screens"
 import { colors, spacing, typography } from "../theme"
@@ -29,13 +29,18 @@ export type TabParamList = {
       name: string
       formats: {
         id: string
+        name: string
         abbreviation: string
       }
       art_crops: {
         id: string
-        image_url: string
+        crop_url: string
+        banner_url: string
       }
     }
+  }
+  DeckList: {
+    id: string
   }
 }
 
@@ -107,7 +112,7 @@ export function Navigator() {
       <Tab.Group>
         <Tab.Screen
           name="Decklist"
-          component={DecklistScreen}
+          component={DeckScreen}
           options={{
             tabBarLabel: "Decks",
             tabBarIcon: ({ focused }) => (

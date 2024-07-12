@@ -26,7 +26,7 @@ export type DeckListItemProps = {
     }
     art_crops: {
       id: string
-      image_url: string
+      crop_url: string
     }
   }
   onPress: () => void
@@ -39,8 +39,8 @@ export function DeckListItem(props: DeckListItemProps) {
     <View style={$containerStyle}>
       <TouchableOpacity style={$itemContainer} onPress={props.onPress}>
         <View style={$imageContainer}>
-          {art_crops?.image_url ? (
-            <Image style={$imageStyle} source={{ uri: art_crops.image_url }} />
+          {art_crops?.crop_url ? (
+            <Image style={$imageStyle} source={{ uri: art_crops.crop_url }} />
           ) : (
             <Image style={$imageStyle} source={placeholderImage} />
           )}

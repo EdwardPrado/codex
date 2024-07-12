@@ -82,7 +82,6 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       } else {
         const { data, error } = await signIn(input)
         if (error) {
-          console.log(error)
           setLoginError(true)
         } else console.log(data)
       }
