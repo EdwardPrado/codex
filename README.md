@@ -2,7 +2,7 @@
 
 Codex is a utility app for the trading card game Flesh and Blood.
 
-## App Features
+## Features
 
 Currently includes:
 
@@ -18,6 +18,12 @@ Currently includes:
 - For compiling / running in a simulator follow the [React Native](https://reactnative.dev/docs/environment-setup) documentation
 
 ## Quick Start
+
+Add the following to the .env file
+```
+API_KEY="SUPABASE_ANON_API_KEY"
+API_URL="SUPABASE_API_URL_HERE"
+```
 
 Run one of the following depending on target system
 
